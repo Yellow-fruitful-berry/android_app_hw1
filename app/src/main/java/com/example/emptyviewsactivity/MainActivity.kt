@@ -38,6 +38,11 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            if (mu.isNaN() || sigmaSquared.isNaN()) {
+                resultView.text = "Invalid input. Please enter valid numbers."
+                return@setOnClickListener
+            }
+
             generatedNumber = generateLogNormal(mu, sigmaSquared)
             resultView.text = generatedNumber.toString()
         }
