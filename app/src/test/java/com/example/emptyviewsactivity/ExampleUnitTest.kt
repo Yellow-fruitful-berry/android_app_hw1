@@ -102,4 +102,26 @@ class ExampleUnitTest {
         val eps = 1e-9
         assertTrue(abs(result - 1.172519606429523) < eps)
     }
+
+    @Test
+    fun generateLogNormalTest10() {
+        val mu = 2.0
+        val sigmaSquared = 0.0
+        val sigma = sqrt(sigmaSquared)
+        val z = Random.nextDouble()
+        val result = exp(mu + sigma * z)
+        val eps = 1e-9
+        assertTrue(abs(result - 7.3890560989065) < eps)
+    }
+
+    @Test
+    fun generateLogNormalTest11() {
+        val mu = -2.0
+        val sigmaSquared = 0.0
+        val sigma = sqrt(sigmaSquared)
+        val z = Random.nextDouble()
+        val result = exp(mu + sigma * z)
+        val eps = 1e-9
+        assertTrue(abs(result - 0.1353352832366127) < eps)
+    }
 }
