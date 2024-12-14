@@ -1,34 +1,36 @@
 package com.example.emptyviewsactivity
 
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
+import org.hamcrest.Matchers.not
 
-import org.junit.Assert.*
-
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
+
+    @get:Rule
+    val activityRule = ActivityScenarioRule(MainActivity::class.java)  // This ensures the activity is launched
+
     @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.emptyviewsactivity", appContext.packageName)
+    fun testGenerateLogNormal() {
+        // Enter a value for mean
+        onView(withId(R.id.mean_val)).perform(typeText("0.5"), closeSoftKeyboard())
+
+        // Enter a value for variance
+        onView(withId(R.id.variance_value)).perform(typeText("0.25"), closeSoftKeyboard())
+
+        // Click the submit button
+        onView(withId(R.id.get_random_num)).perform(click())
+
+        // Check that a result appears
+        onView(withId(R.id.random_number_result))
+            .check(matches(not(withText("")))) // Ensure the result is not empty
     }
 }
-
-//class LogNormalGeneratorTest {
-//    @Test
-//    fun testLogNormalGeneration() {
-//        val mu = 0.0
-//        val sigmaSquared = 1.0
-//        val result = generateLogNormal(mu, sigmaSquared)
-//        assertTrue(result > 0) // Логнормальное число всегда положительно
-//    }
-//}
