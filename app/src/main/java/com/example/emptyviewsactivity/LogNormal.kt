@@ -8,7 +8,10 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 
 object LogNormal {
-    fun generate(mu: Double, sigmaSquared: Double): Double {
+    fun generate(
+        mu: Double,
+        sigmaSquared: Double,
+    ): Double {
         if (sigmaSquared < 0) {
             return Double.NaN
         }
