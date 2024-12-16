@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Empty Views Activity</string>
+    <string name="invalid_input_message">Invalid input. Please enter valid numbers.</string>
+    <string name="negative_variance_message">Variance cannot be negative.</string>
 </resources>
