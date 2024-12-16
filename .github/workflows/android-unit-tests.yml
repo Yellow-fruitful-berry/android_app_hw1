@@ -1,4 +1,4 @@
-name: Android Unit Tests
+name: Android CI Pipeline
 
 on:
   push:
@@ -11,8 +11,8 @@ on:
       - develop
 
 jobs:
-  test:
-    name: Run Unit Tests
+  build-and-test:
+    name: Build APK, AAB, and Run Unit Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -23,18 +23,36 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        java-version: '17' # Use the Java version compatible with your Android project
+        java-version: '17'
 
     - name: Set up Android SDK
       uses: android-actions/setup-android@v2
       with:
-        api-level: 34          # Change to your project's target API level
-        build-tools: 34.0.2    # Change to your project's build tools version
+        api-level: 34
+        build-tools: 34.0.2
         target: android-33
-        ndk: 25.2.9519653      # Optional: Specify the NDK version if needed
+        ndk: 25.2.9519653
 
     - name: Install dependencies
       run: ./gradlew dependencies
 
     - name: Run unit tests
       run: ./gradlew testDebugUnitTest
+
+    - name: Build APK
+      run: ./gradlew assembleDebug
+
+    - name: Build AAB
+      run: ./gradlew bundleRelease
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: debug-apk
+        path: app/build/outputs/apk/debug/*.apk
+
+    - name: Upload AAB
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-aab
+        path: app/build/outputs/bundle/release/*.aab
