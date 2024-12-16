@@ -5,12 +5,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import kotlin.math.exp
-import kotlin.math.sqrt
-import kotlin.random.Random
-import kotlin.math.ln
-import kotlin.math.cos
-import kotlin.math.PI
 
 class MainActivity : AppCompatActivity() {
     private var generatedNumber: Double? = null
@@ -28,22 +22,17 @@ class MainActivity : AppCompatActivity() {
             val mu = meanVal.text.toString().toDoubleOrNull()
             val sigmaSquared = varianceVal.text.toString().toDoubleOrNull()
 
-            if (mu == null || sigmaSquared == null) {
-                resultView.text = "Invalid input. Please enter valid numbers."
+            if (mu == null || sigmaSquared == null || mu.isNaN() || sigmaSquared.isNaN()) {
+                resultView.text = getString(R.string.invalid_input_message)
                 return@setOnClickListener
             }
 
             if (sigmaSquared < 0) {
-                resultView.text = "Variance cannot be negative."
+                resultView.text = getString(R.string.negative_variance_message)
                 return@setOnClickListener
             }
 
-            if (mu.isNaN() || sigmaSquared.isNaN()) {
-                resultView.text = "Invalid input. Please enter valid numbers."
-                return@setOnClickListener
-            }
-
-            generatedNumber = generateLogNormal(mu, sigmaSquared)
+            generatedNumber = LogNormal.generate(mu, sigmaSquared) // Updated call
             resultView.text = generatedNumber.toString()
         }
 
@@ -56,20 +45,5 @@ class MainActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putDouble("generatedNumber", generatedNumber ?: 0.0)
-    }
-
-    private fun generateLogNormal(mu: Double, sigmaSquared: Double): Double {
-        if (sigmaSquared < 0) {
-            return Double.NaN
-        }
-
-        val sigma = sqrt(sigmaSquared)
-
-        val u1 = Random.nextDouble()
-        val u2 = Random.nextDouble()
-
-        val z0 = sqrt(-2.0 * ln(u1)) * cos(2.0 * PI * u2)
-
-        return exp(mu + sigma * z0)
     }
 }
